@@ -8,6 +8,7 @@ Visualization Final Project
   - `clean/`: contains cleaned data used for our visualization
 - `js/` 
   - `processor/`: contains data processing using js and d3.csv/json
+  - `line/`: contains line chart
   - `map/`: contains map chart
   - `bubble/`: contains bubble chart 
 - `img/`: contains images for header, OTT brand and etc. 
