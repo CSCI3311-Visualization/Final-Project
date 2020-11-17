@@ -1,7 +1,4 @@
 body {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
   text-align: center;
 }
 
@@ -16,6 +13,13 @@ body {
   border: 1px solid steelblue;
   border-width: 2px;
   border-radius: 4px;
+  display: flex;
+  justify-content: center;
+}
+
+.side-charts {
+  margin: 0 2%;
+  border: 5px solid chartreuse;
 }
 
 .section-container {
