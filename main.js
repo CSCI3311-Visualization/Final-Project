@@ -1,7 +1,7 @@
-import mapDataProcessor from './js/map/mapDataProcessor.js';
-import MapChart from './js/map/mapChart.js';
-import PieChart from './js/pie/piechart.js';
-import BubbleChart from './js/bubble/Bubble.js';
+import mapDataProcessor from 'js/map/mapDataProcessor.js';
+import MapChart from 'js/map/mapChart.js';
+import PieChart from 'js/pie/piechart.js';
+import BubbleChart from 'gjs/bubble/Bubble.js';
 
 Promise.all([
   d3.json('./data/raw/world-110m.json'),
