@@ -14,16 +14,16 @@ export default function StarChart(container) {
 
   const group = svg
     .append('g')
-    .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
+    .attr('transform', 'translate(' + 0 + ',' + 0 + ')');
 
-  const star1 = new d3Star();
-  const star2 = new d3Star();
-  const star3 = new d3Star();
-  const star4 = new d3Star();
-  const star5 = new d3Star();
+  const star1 = d3Star();
+  const star2 = d3Star();
+  const star3 = d3Star();
+  const star4 = d3Star();
+  const star5 = d3Star();
 
   function update(data) {
-    console.log(data);
+    console.log('star update', data);
 
     star1
       .x(100)
@@ -61,11 +61,12 @@ export default function StarChart(container) {
       .borderColor('#CAAA6F')
       .borderWidth(1);
 
-    group.call(star1);
-    group.call(star2);
-    group.call(star3);
-    group.call(star4);
-    group.call(star5);
+
+    star1(group);
+    star2(group);
+    star3(group);
+    star4(group);
+    star5(group);
   }
 
   return {

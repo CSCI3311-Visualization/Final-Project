@@ -42,8 +42,6 @@ export default function MapChart(container) {
     const objKeys = Object.keys(obj);
     const totalExtent = d3.extent(objKeys, (d) => obj[d].total);
 
-    console.log(totalExtent);
-
     const mouseover = function (e, d) {
       d3.selectAll('.world-map')
         .transition()
@@ -64,11 +62,11 @@ export default function MapChart(container) {
       const pieData = [rottenScore, 100 - rottenScore, 0];
 
       const imdb = countryVal['IMDB'];
-      const imdbRounded = (Math.round(imdb * 100) / 100).toFixed(2);
+      const imdbRounded = +imdb.toFixed(2);
 
       const starProcessed = mapDataProcessor.starProcess(imdbRounded);
 
-      //   starChart.update(starProcessed);
+      starChart.update(starProcessed);
 
       barChart.update(mapProcessed);
 
