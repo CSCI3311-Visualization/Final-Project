@@ -23,8 +23,6 @@ export default function StarChart(container) {
   const star5 = d3Star();
 
   function update(data) {
-    console.log('star update', data);
-
     star1
       .x(100)
       .y(100)
@@ -60,7 +58,6 @@ export default function StarChart(container) {
       .value(data[4])
       .borderColor('#CAAA6F')
       .borderWidth(1);
-
 
     star1(group);
     star2(group);

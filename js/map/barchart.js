@@ -16,7 +16,7 @@ export default function BarChart(container) {
     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
   // Create scales
-  const xScale = d3.scaleBand().rangeRound([0, width]).paddingInner(0.1);
+  const xScale = d3.scaleBand().rangeRound([0, width]).paddingInner(0.2);
   const yScale = d3.scaleLinear().range([height, 0]);
 
   const xAxis = d3.axisBottom().scale(xScale);
@@ -27,13 +27,18 @@ export default function BarChart(container) {
 
   function update(data) {
     const platforms = data.map((d) => d.platform);
-    console.log('platforms', platforms);
-    xScale.domain(platforms);
-    yScale.domain(d3.extent(data, (d) => d.count));
+    const countMax = d3.max(data, (d) => d.count);
 
     console.log('barchart update', data);
+    console.log('platforms', platforms);
 
-    const rects = group.selectAll('rect').data(data, (d) => d.count);
+    xScale.domain(platforms);
+    yScale.domain([0, countMax + 1]);
+    yAxis.ticks(Math.min(countMax + 1, 10));
+
+    group.selectAll('rect').remove();
+
+    const rects = group.selectAll('rect').data(data);
 
     rects
       .enter()

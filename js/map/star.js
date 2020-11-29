@@ -4,12 +4,11 @@ export default function d3Star() {
   let y = 0;
   let value = 1.0; //Range is 0.0 - 1.0
   let borderWidth = 3;
-  let borderColor = 'black';
+  let borderColor = 'CAAA6F';
   let starColor = '#FFB500';
   let backgroundColor = 'white';
 
   function star(selection) {
-    console.log(value, 'value within star context');
     const line = d3
       .line()
       .x((d) => d.x)
@@ -61,7 +60,7 @@ export default function d3Star() {
       .attr('y', y - h)
       .attr('width', size - size * value)
       .attr('height', size)
-      .style('fill', 'white');
+      .style('fill', backgroundColor);
 
     //border of the star
     selection

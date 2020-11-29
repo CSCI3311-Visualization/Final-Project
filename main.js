@@ -8,8 +8,8 @@ Promise.all([
   d3.csv('./data/clean/streaming_platform_map.csv', d3.autoType),
 ]).then(([worldmap, data]) => {
   const processedObj = mapDataProcessor.mapProcess(data);
-
   const mapChart = MapChart('#map-chart-container');
+  
   mapChart.update(worldmap, processedObj);
 });
 

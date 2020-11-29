@@ -6,7 +6,7 @@ import StarChart from './starChart.js';
 export default function MapChart(container) {
   // initialization
   // Create a SVG with the margin convention
-  const margin = { top: 20, right: 20, bottom: 20, left: 50 };
+  const margin = { top: 20, right: 20, bottom: 20, left: 20 };
   const width = 1000 - margin.left - margin.right;
   const height = 700 - margin.top - margin.bottom;
 
@@ -37,10 +37,19 @@ export default function MapChart(container) {
     );
 
     const path = d3.geoPath().projection(projection);
-    const yo = {};
 
     const objKeys = Object.keys(obj);
     const totalExtent = d3.extent(objKeys, (d) => obj[d].total);
+    console.log('totalExtent', totalExtent);
+
+    const totals = objKeys.map((k) => obj[k].total);
+    totals.sort((a, b) => a - b);
+    console.log('totals', totals);
+
+    const colorScale = d3
+      .scaleThreshold()
+      .domain([50, 100, 300, 1500])
+      .range(d3.schemeBlues[5]);
 
     const mouseover = function (e, d) {
       d3.selectAll('.world-map')
@@ -56,6 +65,8 @@ export default function MapChart(container) {
 
       const country = d.properties.name;
       const countryVal = obj[country];
+
+      if (!countryVal) return;
       const mapProcessed = mapDataProcessor.barProcess(countryVal);
 
       const rottenScore = Math.floor(countryVal['Rotten']);
@@ -78,7 +89,7 @@ export default function MapChart(container) {
       d3.select(this).transition().duration(200).style('stroke', 'transparent');
     };
 
-    svg
+    group
       .selectAll('path')
       .data(features)
       .join('path')
@@ -86,7 +97,7 @@ export default function MapChart(container) {
       .attr('fill', (d) => {
         const country = d.properties.name;
         if (obj[country] !== undefined) {
-          return 'steelblue';
+          return colorScale(obj[country].total);
         }
         return 'grey';
       })
@@ -95,11 +106,7 @@ export default function MapChart(container) {
       .on('mouseover', mouseover)
       .on('mouseleave', mouseleave);
 
-    const keys = Object.keys(obj);
-    const filter = keys.filter((v) => yo[v] !== true);
-    console.log('filter', filter);
-
-    svg
+    group
       .append('path')
       .datum(topojson.mesh(worldmap, worldmap.objects.countries))
       .attr('d', path)
@@ -107,6 +114,62 @@ export default function MapChart(container) {
       .attr('stroke', 'white')
       .attr('class', 'world-map subunit-boundary')
       .style('opacity', 1);
+
+    ////////////
+    // LEGEND //
+    ////////////
+
+    const rectSize = 15;
+    const legendX = margin.left - 5;
+    const legendY = height - 5 * (rectSize + 10);
+
+    // Append Title
+    group
+      .append('text')
+      .attr('class', 'labels')
+      .attr('x', legendX)
+      .attr('y', legendY - 15)
+      .style('fill', 'black')
+      .attr('text-anchor', 'left')
+      .style('alignment-baseline', 'middle')
+      .attr('font-weight', 'bold')
+      .text('Data Count');
+
+    const legendInfo = [
+      { label: '1500+', number: 1600 },
+      { label: '300 ~ 1500', number: 400 },
+      { label: '100 ~ 300', number: 110 },
+      { label: '51 ~ 100', number: 60 },
+      { label: '0 ~ 50', number: 10 },
+      { label: 'No Data', number: -1 },
+    ];
+
+    const legends = group.selectAll('.legend').data(legendInfo, (d) => d);
+
+    legends
+      .enter()
+      .append('rect')
+      .attr('class', 'legend')
+      .attr('x', legendX)
+      .attr('y', (d, i) => legendY + i * (rectSize + 5))
+      .attr('width', rectSize)
+      .attr('height', rectSize)
+      .style('fill', (d) => colorScale(d.number));
+
+    legends.exit().remove();
+
+    const labels = group.selectAll('.labels').data(legendInfo, (d) => d);
+
+    labels
+      .enter()
+      .append('text')
+      .attr('class', 'labels')
+      .attr('x', legendX + rectSize * 1.2)
+      .attr('y', (d, i) => legendY + i * (rectSize + 5) + rectSize / 2)
+      .style('fill', 'black')
+      .attr('text-anchor', 'left')
+      .style('alignment-baseline', 'middle')
+      .text((d) => d.label);
   }
 
   return {
