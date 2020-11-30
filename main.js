@@ -9,7 +9,7 @@ Promise.all([
 ]).then(([worldmap, data]) => {
   const processedObj = mapDataProcessor.mapProcess(data);
   const mapChart = MapChart('#map-chart-container');
-  
+
   mapChart.update(worldmap, processedObj);
 });
 
@@ -27,12 +27,28 @@ d3.csv('./data/clean/streaming_platform_pie.csv', d3.autoType).then((data) => {
 d3.csv('./data/clean/streaming_platform_bubble.csv', d3.autoType).then(
   (data) => {
     let movies = data.filter((d) => {
-      if (0 < d.IMDb <= 10 && d.Genres) {
+      if (d.IMDb == null) return;
+      else if (0 < d.IMDb < 10 && d.Genres) {
         return d;
       }
     });
-    let dataset = movies.slice(0, 600);
-    const Bubble = BubbleChart('#bubble-chart-container');
-    Bubble.update(dataset);
+
+    let dataset = movies.filter((d) => {
+      if (d.Netflix == 1) return d;
+    });
+    dataset.sort((a, b) => b['IMDb'] - a['IMDb']);
+    let dat = dataset.slice(0, 600);
+    console.log(dataset);
+    const Bubble = BubbleChart('.bubble');
+    Bubble.update(dat);
+
+    // let movies = data.filter((d) => {
+    //   if (0 < d.IMDb <= 10 && d.Genres) {
+    //     return d;
+    //   }
+    // });
+    // let dataset = movies.slice(0, 600);
+    // const Bubble = BubbleChart('#bubble-chart-container');
+    // Bubble.update(dataset);
   }
 );
