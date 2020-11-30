@@ -24,12 +24,50 @@ export default function PieChart(container) {
 
     const arcs = d3.pie()(data);
 
+    console.log('arcs', arcs);
+
     group
-      .selectAll('path')
+      .selectAll('slices')
       .data(arcs)
       .join('path')
       .attr('fill', (d) => color(d.data))
       .attr('d', arc);
+
+    group
+      .selectAll('slices')
+      .data(arcs)
+      .enter()
+      .append('text')
+      .text((d, i) => {
+        if (d.value !== 0) {
+          return d.value + '%';
+        }
+        return;
+      })
+      .attr('transform', function (d) {
+        return 'translate(' + arc.centroid(d) + ')';
+      })
+      .style('text-anchor', 'middle')
+      .style('font-size', 10);
+
+    ////////////
+    // LEGEND //
+    ////////////
+
+    const rectSize = 15;
+    const legendX = width + 30;
+    const legendY = height - 3 * 40;
+
+    const rects = group.selectAll('.legend').data(data);
+
+    rects
+      .enter()
+      .append('rect')
+      .attr('class', 'legend')
+      .attr('x', legendX)
+      .attr('y', height)
+      .attr('width', rectSize)
+      .attr('height', rectSize);
   }
 
   return {
