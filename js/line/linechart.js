@@ -1,17 +1,25 @@
-let width = 500,
-  height = 700;
+let width = 400,
+  height = 500;
 
 const margin = { top: 40, right: 50, bottom: 50, left: 40 };
 
 const svg = d3
   .select('#line-chart-container')
   .append('svg')
-  .attr('width', width + 1000)
+  .attr('width', width +200)
   .attr('height', height)
   .append('g')
   .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-// Load CSV file
+const svg1 = d3
+  .select('#line-chart-container1')
+  .append('svg')
+  .attr('width', width+500)
+  .attr('height', height)
+  .append('g')
+  .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+  // Load CSV file
 d3.csv('data/clean/netflix-movie.csv').then((data) => {
   console.log(data);
 
@@ -49,11 +57,11 @@ d3.csv('data/clean/netflix-movie.csv').then((data) => {
     .attr('stroke-dasharray', `0,${l}`)
     .attr('d', line)
     .transition()
-    .duration(3000)
+    .duration(2500)
     .ease(d3.easeLinear)
     .attr('stroke-dasharray', `${l},${l}`);
 
-  svg
+  svg1
     .append('path')
     .datum(data)
     .attr('fill', 'none')
@@ -64,7 +72,7 @@ d3.csv('data/clean/netflix-movie.csv').then((data) => {
     .attr('stroke-dasharray', `0,${l1}`)
     .attr('d', line1)
     .transition()
-    .duration(3000)
+    .duration(2500)
     .ease(d3.easeLinear)
     .attr('stroke-dasharray', `${l1},${l1}`);
 
@@ -121,14 +129,21 @@ d3.csv('data/clean/netflix-movie.csv').then((data) => {
   //yAxis for netflix
   let yAxis1 = (g) =>
     g
-      .attr('transform', `translate(${margin.left + 605}-10)`)
-      .call(d3.axisRight(y1).ticks(width / 110))
+      .attr('transform', `translate(${margin.left + 30}-10)`)
+      .call(d3.axisLeft(y1).ticks(width / 110))
       .call((g) => g.select('.domain').remove())
+      .call((g) =>
+        g
+        .selectAll('.tick line')
+        .clone()
+        .attr('x2', width + 80)
+        .attr('stroke-opacity', 0.1)
+    )
       .call((g) =>
         g
           .select('.tick:last-of-type text')
           .clone()
-          .attr('x', -170)
+          .attr('x', 8)
           .attr('text-anchor', 'start')
           .attr('font-weight', 'bold')
           .attr('fill', '#ff3399')
@@ -137,11 +152,12 @@ d3.csv('data/clean/netflix-movie.csv').then((data) => {
 
   svg.append('g').call(xAxis);
   svg.append('g').call(yAxis);
-  svg.append('g').call(yAxis1);
+  svg1.append('g').call(xAxis);
+  svg1.append('g').call(yAxis1);
 
   const datapoints = svg.append('g').selectAll('circle').data(data).enter();
 
-  const datapoints1 = svg.append('g').selectAll('circle').data(data).enter();
+  const datapoints1 = svg1.append('g').selectAll('circle').data(data).enter();
 
   // chart
   // add circles
@@ -152,15 +168,15 @@ d3.csv('data/clean/netflix-movie.csv').then((data) => {
 
       console.log(pos);
 
-      d3.select('.tooltip')
+      d3.select('.tooltip-line')
         .style('display', 'inline-block')
         .style('opacity', 0.8)
-        .style('left', pos[0] + 'px')
-        .style('top', pos[1] + 'px')
-        .html(d.MovieTickets);
+        .style('left', pos[0] -140 + 'px')
+        .style('top', pos[1] -300 + 'px')
+        .html(d.MovieTickets + " million");
     })
     .on('mouseleave', function (d) {
-      d3.select('.tooltip')
+      d3.select('.tooltip-line')
         .style('display', 'hidden')
         .style('opacity', 0)
         .html('');
@@ -179,15 +195,15 @@ d3.csv('data/clean/netflix-movie.csv').then((data) => {
 
       console.log(pos);
 
-      d3.select('.tooltip')
+      d3.select('.tooltip-line1')
         .style('display', 'inline-block')
         .style('opacity', 0.8)
-        .style('left', pos[0] + 'px')
-        .style('top', pos[1] + 'px')
-        .html(d.NetflixSubscribers);
+        .style('left', pos[0] - 140 + 'px')
+        .style('top', pos[1] - 300 + 'px')
+        .html(d.NetflixSubscribers + " million");
     })
     .on('mouseleave', function (d) {
-      d3.select('.tooltip')
+      d3.select('.tooltip-line1')
         .style('display', 'hidden')
         .style('opacity', 0)
         .html('');
