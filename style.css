@@ -3,7 +3,6 @@ body {
 }
 
 .vis-container {
-  /* height: 100%; */
   margin-left: 2%;
   margin-right: 2%;
   margin-top: 3%;
@@ -34,14 +33,40 @@ h3 {
   text-align: center;
 }
 
+#title {
+  margin-top: 20vh;
+}
+
+.text-block {
+  font-size: 25px;
+  margin-top: 20vh;
+}
+
+#page-intro p {
+  width: 700px;
+  max-width: 90%;
+  margin: 0 auto;
+}
+
 /* Jane */
-.tooltip {
+.tooltip-line {
   display: none;
+  position: absolute;
   font-size: 13px;
-  padding: 3px;
-  background-color: rgb(7, 8, 8);
+  padding: 4px;
+  background-color: blue;
   color: white;
-  border-radius: 5px;
+  border-radius: 8px;
+}
+
+.tooltip-line1 {
+  display: none;
+  position: absolute;
+  font-size: 13px;
+  padding: 4px;
+  background-color: #ff3399;
+  color: white;
+  border-radius: 8px;
 }
 /* End of Jane */
 
