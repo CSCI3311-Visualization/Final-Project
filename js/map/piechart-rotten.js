@@ -11,27 +11,31 @@ export default function PieChart(container) {
 
   const group = svg
     .append('g')
-    .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
+    .attr('transform', 'translate(' + width / 3 + ',' + height / 2 + ')');
 
-  const color = d3.scaleOrdinal(['steelblue', 'red', 'grey']);
+  const colorScale = d3
+    .scaleOrdinal(['steelblue', 'red', 'grey'])
+    .domain([0, 1, 2]);
 
   const arc = d3.arc().innerRadius(0).outerRadius(50);
 
   function update(data) {
-    console.log('piechart', data);
-
-    color.domain(data);
-
     const arcs = d3.pie()(data);
 
+    console.log('piechart', data);
     console.log('arcs', arcs);
 
-    group
-      .selectAll('slices')
+    const pieGraph = group.selectAll('slices');
+
+    pieGraph
       .data(arcs)
       .join('path')
-      .attr('fill', (d) => color(d.data))
-      .attr('d', arc);
+      .attr('d', arc)
+      .attr('fill', (d, i) => colorScale(i))
+      .attr('stroke', 'white')
+      .style('stroke-width', '2px');
+
+    pieGraph.exit().remove();
 
     group
       .selectAll('slices')
@@ -48,6 +52,7 @@ export default function PieChart(container) {
         return 'translate(' + arc.centroid(d) + ')';
       })
       .style('text-anchor', 'middle')
+      .attr('font-weight', 'bold')
       .style('font-size', 10);
 
     ////////////
@@ -55,19 +60,43 @@ export default function PieChart(container) {
     ////////////
 
     const rectSize = 15;
-    const legendX = width + 30;
-    const legendY = height - 3 * 40;
+    const legendX = 65;
+    const legendY = 50;
 
-    const rects = group.selectAll('.legend').data(data);
+    const rects = svg.selectAll('.legend').data(data);
 
     rects
-      .enter()
-      .append('rect')
+      .join('rect')
       .attr('class', 'legend')
-      .attr('x', legendX)
-      .attr('y', height)
+      .attr('x', width / 3 + legendX)
+      .attr('y', (d, i) => legendY + i * (rectSize + 5))
       .attr('width', rectSize)
-      .attr('height', rectSize);
+      .attr('height', rectSize)
+      .style('fill', (d, i) => colorScale(i));
+
+    rects.exit().remove();
+
+    const labels = svg.selectAll('.labels').data(data);
+
+    labels
+      .join('text')
+      .attr('class', 'labels')
+      .attr('x', width / 3 + legendX + 20)
+      .attr('y', (d, i) => legendY + i * (rectSize + 5) + rectSize / 2)
+      .text((d, i) => {
+        if (i === 0) {
+          return 'Positive Review';
+        } else if (i === 1) {
+          return 'Negative Review';
+        } else if (i === 2) {
+          return 'No Data';
+        } else {
+          return;
+        }
+      })
+      .style('fill', (d, i) => colorScale(i))
+      .attr('text-anchor', 'left')
+      .style('alignment-baseline', 'middle');
   }
 
   return {

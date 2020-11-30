@@ -66,7 +66,7 @@ export default function DensityChart(container) {
         yDisplay
             .call(yAxis);
 
-        let bars = group.selectAll(".rect")
+        let bars = group.selectAll("rect")
             .data(bins)
             .join("rect")
             .attr("x", 1)

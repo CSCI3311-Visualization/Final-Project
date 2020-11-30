@@ -29,7 +29,7 @@ export default function BarChart(container) {
     const platforms = data.map((d) => d.platform);
     const countMax = d3.max(data, (d) => d.count);
 
-    console.log('barchart update', data);
+    console.log('barchart update data', data);
     console.log('platforms', platforms);
 
     xScale.domain(platforms);
@@ -52,9 +52,32 @@ export default function BarChart(container) {
 
     rects.exit().remove();
 
-    xAxisGroup.attr('transform', 'translate(0,' + height + ')').call(xAxis);
+    xAxisGroup
+      .attr('transform', 'translate(0,' + height + ')')
+      .call(xAxis)
+      .call((g) =>
+        g
+          .append('text')
+          .attr('x', width + 45)
+          .attr('y', 0)
+          .attr('font-weight', 'bold')
+          .attr('text-anchor', 'end')
+          .attr('fill', 'black')
+          .text('Platform')
+      );
 
-    yAxisGroup.call(yAxis);
+    yAxisGroup
+      .call(yAxis)
+      .call((g) =>
+        g
+          .append('text')
+          .attr('x', 5)
+          .attr('y', -3)
+          .attr('fill', 'black')
+          .attr('font-weight', 'bold')
+          .attr('text-anchor', 'start')
+          .text('Movie Count')
+      );
   }
 
   return {

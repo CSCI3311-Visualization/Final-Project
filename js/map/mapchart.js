@@ -8,7 +8,7 @@ export default function MapChart(container) {
   // Create a SVG with the margin convention
   const margin = { top: 20, right: 20, bottom: 20, left: 20 };
   const width = 1000 - margin.left - margin.right;
-  const height = 700 - margin.top - margin.bottom;
+  const height = 750 - margin.top - margin.bottom;
 
   const barChart = BarChart('#bar-chart-container');
   const pieChart = PieChart('#Rotten-tomato-container');
@@ -51,6 +51,26 @@ export default function MapChart(container) {
       .domain([50, 100, 300, 1500])
       .range(d3.schemeBlues[5]);
 
+    const defaultUpdate = function (country) {
+      // "United States of America";
+      d3.select('#Map-Country').text(country);
+      const countryVal = obj[country];
+      const mapProcessed = mapDataProcessor.barProcess(countryVal);
+      const rottenScore = Math.floor(countryVal['Rotten']);
+      const pieData = [rottenScore, 100 - rottenScore, 0];
+
+      const imdb = countryVal['IMDB'];
+      const imdbRounded = +imdb.toFixed(2);
+
+      const starProcessed = mapDataProcessor.starProcess(imdbRounded);
+
+      starChart.update(starProcessed);
+
+      barChart.update(mapProcessed);
+
+      pieChart.update(pieData);
+    };
+
     const mouseover = function (e, d) {
       d3.selectAll('.world-map')
         .transition()
@@ -64,9 +84,11 @@ export default function MapChart(container) {
         .style('stroke', 'black');
 
       const country = d.properties.name;
-      const countryVal = obj[country];
+      d3.select('#Map-Country').text(country);
 
+      const countryVal = obj[country];
       if (!countryVal) return;
+
       const mapProcessed = mapDataProcessor.barProcess(countryVal);
 
       const rottenScore = Math.floor(countryVal['Rotten']);
@@ -121,7 +143,7 @@ export default function MapChart(container) {
 
     const rectSize = 15;
     const legendX = margin.left - 5;
-    const legendY = height - 5 * (rectSize + 10);
+    const legendY = height - margin.bottom - 5 * (rectSize + 10);
 
     // Append Title
     group
@@ -133,7 +155,7 @@ export default function MapChart(container) {
       .attr('text-anchor', 'left')
       .style('alignment-baseline', 'middle')
       .attr('font-weight', 'bold')
-      .text('Data Count');
+      .text('Movie Count');
 
     const legendInfo = [
       { label: '1500+', number: 1600 },
@@ -154,7 +176,12 @@ export default function MapChart(container) {
       .attr('y', (d, i) => legendY + i * (rectSize + 5))
       .attr('width', rectSize)
       .attr('height', rectSize)
-      .style('fill', (d) => colorScale(d.number));
+      .style('fill', (d) => {
+        if (d.number < 0) {
+          return 'grey';
+        }
+        return colorScale(d.number);
+      });
 
     legends.exit().remove();
 
@@ -170,6 +197,9 @@ export default function MapChart(container) {
       .attr('text-anchor', 'left')
       .style('alignment-baseline', 'middle')
       .text((d) => d.label);
+
+    /// Default update
+    defaultUpdate('United States of America');
   }
 
   return {
