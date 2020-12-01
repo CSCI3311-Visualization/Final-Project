@@ -7,6 +7,10 @@ body {
   border-radius: 25px;
 }
 
+.fp-controlArrow {
+  margin: 5%;
+}
+
 .vis-container {
   /* margin-left: 2%;
   margin-right: 2%;
@@ -38,9 +42,7 @@ h3 {
   text-align: center;
 }
 
-#title {
-  margin-top: 20vh;
-}
+
 
 .text-block {
   font-size: 25px;

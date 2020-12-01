@@ -1,6 +1,6 @@
 export default function LineChart(container) {
   const margin = { top: 40, right: 40, bottom: 40, left: 40 };
-  const width = 500 - margin.left - margin.right;
+  const width = 700 - margin.left - margin.right;
   const height = 500 - margin.top - margin.bottom;
 
   const svg = d3
@@ -161,6 +161,8 @@ export default function LineChart(container) {
       .enter();
 
     // chart
+
+    const circleRadius = 5;
     // add circles
     datapoints
       .append('circle')
@@ -184,7 +186,7 @@ export default function LineChart(container) {
       })
       .attr('cx', (d) => x(d.Year))
       .attr('cy', (d) => y(d.MovieTickets))
-      .attr('r', 3.5)
+      .attr('r', circleRadius)
       .style('fill', 'white')
       .attr('stroke', 'black')
       .attr('stroke-width', 2);
@@ -211,7 +213,7 @@ export default function LineChart(container) {
       })
       .attr('cx', (d) => x(d.Year))
       .attr('cy', (d) => y1(d.NetflixSubscribers))
-      .attr('r', 3.5)
+      .attr('r', circleRadius)
       .style('fill', 'white')
       .attr('stroke', 'black')
       .attr('stroke-width', 2);
