@@ -380,6 +380,7 @@ export default function BubbleChart(container) {
         step();
         if (sliderStage === 1) {
           d3.select('#play-button').text('Next  ▶');
+          // d3.select('.density').remove();
         } else if (sliderStage === 4) {
           d3.select('#play-button').text('Restart  ↻');
         }
