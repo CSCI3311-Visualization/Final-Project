@@ -6,7 +6,7 @@ const margin = { top: 40, right: 50, bottom: 50, left: 40 };
 const svg = d3
   .select('#line-chart-container')
   .append('svg')
-  .attr('width', width +200)
+  .attr('width', width + 200)
   .attr('height', height)
   .append('g')
   .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
@@ -14,12 +14,12 @@ const svg = d3
 const svg1 = d3
   .select('#line-chart-container1')
   .append('svg')
-  .attr('width', width+500)
+  .attr('width', width + 500)
   .attr('height', height)
   .append('g')
   .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-  // Load CSV file
+// Load CSV file
 d3.csv('data/clean/netflix-movie.csv').then((data) => {
   console.log(data);
 
@@ -50,7 +50,7 @@ d3.csv('data/clean/netflix-movie.csv').then((data) => {
     .append('path')
     .datum(data)
     .attr('fill', 'none')
-    .attr('stroke', 'blue')
+    .attr('stroke', 'steelblue')
     .attr('stroke-width', 2.5)
     .attr('stroke-linejoin', 'round')
     .attr('stroke-linecap', 'round')
@@ -65,7 +65,7 @@ d3.csv('data/clean/netflix-movie.csv').then((data) => {
     .append('path')
     .datum(data)
     .attr('fill', 'none')
-    .attr('stroke', '#ff3399')
+    .attr('stroke', 'red')
     .attr('stroke-width', 2.5)
     .attr('stroke-linejoin', 'round')
     .attr('stroke-linecap', 'round')
@@ -123,7 +123,7 @@ d3.csv('data/clean/netflix-movie.csv').then((data) => {
           .attr('x', 6)
           .attr('text-anchor', 'start')
           .attr('font-weight', 'bold')
-          .attr('fill', 'blue')
+          .attr('fill', 'steelblue')
           .text('Number of Movie Tickets Sold, US  (million)')
       );
   //yAxis for netflix
@@ -134,11 +134,11 @@ d3.csv('data/clean/netflix-movie.csv').then((data) => {
       .call((g) => g.select('.domain').remove())
       .call((g) =>
         g
-        .selectAll('.tick line')
-        .clone()
-        .attr('x2', width + 80)
-        .attr('stroke-opacity', 0.1)
-    )
+          .selectAll('.tick line')
+          .clone()
+          .attr('x2', width + 80)
+          .attr('stroke-opacity', 0.1)
+      )
       .call((g) =>
         g
           .select('.tick:last-of-type text')
@@ -146,7 +146,7 @@ d3.csv('data/clean/netflix-movie.csv').then((data) => {
           .attr('x', 8)
           .attr('text-anchor', 'start')
           .attr('font-weight', 'bold')
-          .attr('fill', '#ff3399')
+          .attr('fill', 'red')
           .text('Netflix Subscriptions, US (million)')
       );
 
@@ -170,10 +170,10 @@ d3.csv('data/clean/netflix-movie.csv').then((data) => {
 
       d3.select('.tooltip-line')
         .style('display', 'inline-block')
-        .style('opacity', 0.8)
-        .style('left', pos[0] -140 + 'px')
-        .style('top', pos[1] -300 + 'px')
-        .html(d.MovieTickets + " million");
+        .style('opacity', 1)
+        .style('left', pos[0] + 10 + 'px')
+        .style('top', pos[1] + 'px')
+        .html(d.MovieTickets + ' million');
     })
     .on('mouseleave', function (d) {
       d3.select('.tooltip-line')
@@ -197,10 +197,10 @@ d3.csv('data/clean/netflix-movie.csv').then((data) => {
 
       d3.select('.tooltip-line1')
         .style('display', 'inline-block')
-        .style('opacity', 0.8)
-        .style('left', pos[0] - 140 + 'px')
-        .style('top', pos[1] - 300 + 'px')
-        .html(d.NetflixSubscribers + " million");
+        .style('opacity', 0.9)
+        .style('left', pos[0] + 10 + 'px')
+        .style('top', pos[1] + 'px')
+        .html(d.NetflixSubscribers + ' million');
     })
     .on('mouseleave', function (d) {
       d3.select('.tooltip-line1')
