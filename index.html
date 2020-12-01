@@ -92,8 +92,8 @@
         </section>
 
         <section class='section'>
-            <h1> Bubble Chart by Genres</h1>
-            <section class='vis-container'>
+            <h1>Bubble</h1>
+            <article class="vis-container">
                 <div id='bubble-chart-container'>
                     <div class="bubble">
                         <div id="tooltip2" class="hidden">
@@ -102,13 +102,20 @@
                             <p><strong><span>Genre: </span></strong></p>
                             <p id="genre">g</p>
                         </div>
-                        <div id="toolbar">
-                            <button id="Platform" class="button active">Netflix</button>
-                            <button id="Genre" class="button">By Genres</button>
+                        <button type="button" id="play-button" class="btn play_btn btn-primary">
+                            Next&nbsp;&nbsp;▶
+                        </button>
+                        <div id="slider" class="slider"></div>
+                    </div>
+
+                    <div class="column" id="content">
+                        <div class="box">
+                            <p id="comment-1">
+                            </p>
                         </div>
                     </div>
                 </div>
-                <article class='side-charts'>
+                <div class='side-charts'>
                     <div class="density">
                         <div id="tooltip" class="hidden">
                             <p><strong>Runtime</strong></p>
@@ -117,8 +124,8 @@
                             <p><span id="count">0</span></p>
                         </div>
                     </div>
-                </article>
-            </section>
+                </div>
+            </article>
         </section>
 
         <section class='section'>
