@@ -1,22 +1,25 @@
 export default function LineChart(container) {
-  let width = 400,
-    height = 500;
-
-  const margin = { top: 40, right: 50, bottom: 50, left: 40 };
+  const margin = { top: 40, right: 40, bottom: 40, left: 40 };
+  const width = 800 - margin.left - margin.right;
+  const height = 500 - margin.top - margin.bottom;
 
   const svg = d3
     .select(container)
     .append('svg')
-    .attr('width', width + 200)
-    .attr('height', height)
+    .attr('width', width + margin.left + margin.right)
+    .attr('height', height + margin.top + margin.bottom);
+
+  const group = svg
     .append('g')
     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
   const svg1 = d3
     .select(container + '1')
     .append('svg')
-    .attr('width', width + 500)
-    .attr('height', height)
+    .attr('width', width + margin.left + margin.right)
+    .attr('height', height + margin.top + margin.bottom);
+
+  const group1 = svg1
     .append('g')
     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
@@ -43,7 +46,7 @@ export default function LineChart(container) {
     const l = length(line(data));
     const l1 = length(line1(data));
 
-    svg
+    group
       .append('path')
       .datum(data)
       .attr('fill', 'none')
@@ -58,7 +61,7 @@ export default function LineChart(container) {
       .ease(d3.easeLinear)
       .attr('stroke-dasharray', `${l},${l}`);
 
-    svg1
+    group1
       .append('path')
       .datum(data)
       .attr('fill', 'none')
@@ -75,23 +78,18 @@ export default function LineChart(container) {
 
     let xAxis = (g) =>
       g
-        .attr('transform', `translate(100,${height - 60})`)
-        .call(
-          d3
-            .axisBottom(x)
-            .ticks(width / 80)
-            .tickFormat(d3.format('d'))
-        )
-        .call((g) => g.select('.domain').remove())
-        .call((g) =>
-          g
+        .attr('transform', `translate(0, ${height})`)
+        .call(d3.axisBottom(x).ticks(8).tickFormat(d3.format('d')))
+        .call((gr) => gr.select('.domain').remove())
+        .call((gr) =>
+          gr
             .selectAll('.tick line')
             .clone()
             .attr('y2', -height)
             .attr('stroke-opacity', 0.1)
         )
-        .call((g) =>
-          g
+        .call((gr) =>
+          gr
             .append('text')
             .attr('x', width + 10)
             .attr('y', -4)
@@ -100,21 +98,22 @@ export default function LineChart(container) {
             .attr('fill', 'black')
             .text('Year')
         );
+
     //yAxis for movie tickets
     let yAxis = (g) =>
       g
-        .attr('transform', `translate(${margin.left + 30}-10)`)
+        // .attr('transform', `translate(${margin.left + 30}-10)`)
         .call(d3.axisLeft(y).ticks(width / 110))
-        .call((g) => g.select('.domain').remove())
-        .call((g) =>
-          g
+        .call((gr) => gr.select('.domain').remove())
+        .call((gr) =>
+          gr
             .selectAll('.tick line')
             .clone()
             .attr('x2', width + 80)
             .attr('stroke-opacity', 0.1)
         )
-        .call((g) =>
-          g
+        .call((gr) =>
+          gr
             .select('.tick:last-of-type text')
             .clone()
             .attr('x', 6)
@@ -123,21 +122,22 @@ export default function LineChart(container) {
             .attr('fill', 'steelblue')
             .text('Number of Movie Tickets Sold, US  (million)')
         );
+
     //yAxis for netflix
     let yAxis1 = (g) =>
       g
-        .attr('transform', `translate(${margin.left + 30}-10)`)
+        // .attr('transform', `translate(${margin.left + 30}-10)`)
         .call(d3.axisLeft(y1).ticks(width / 110))
-        .call((g) => g.select('.domain').remove())
-        .call((g) =>
-          g
+        .call((gr) => gr.select('.domain').remove())
+        .call((gr) =>
+          gr
             .selectAll('.tick line')
             .clone()
             .attr('x2', width + 80)
             .attr('stroke-opacity', 0.1)
         )
-        .call((g) =>
-          g
+        .call((gr) =>
+          gr
             .select('.tick:last-of-type text')
             .clone()
             .attr('x', 8)
@@ -147,14 +147,18 @@ export default function LineChart(container) {
             .text('Netflix Subscriptions, US (million)')
         );
 
-    svg.append('g').call(xAxis);
-    svg.append('g').call(yAxis);
-    svg1.append('g').call(xAxis);
-    svg1.append('g').call(yAxis1);
+    group.append('g').call(xAxis);
+    group.append('g').call(yAxis);
+    group1.append('g').call(xAxis);
+    group1.append('g').call(yAxis1);
 
-    const datapoints = svg.append('g').selectAll('circle').data(data).enter();
+    const datapoints = group.append('g').selectAll('circle').data(data).enter();
 
-    const datapoints1 = svg1.append('g').selectAll('circle').data(data).enter();
+    const datapoints1 = group1
+      .append('g')
+      .selectAll('circle')
+      .data(data)
+      .enter();
 
     // chart
     // add circles

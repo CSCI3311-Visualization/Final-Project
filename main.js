@@ -6,11 +6,8 @@ import LineChart from './js/line/linechart.js';
 
 // Load CSV file
 d3.csv('data/clean/netflix-movie.csv').then((data) => {
-  console.log(data);
-
   const lineChart = LineChart('#line-chart-container');
   lineChart.update(data);
-
 });
 
 Promise.all([
@@ -53,7 +50,7 @@ d3.csv('./data/clean/streaming_platform_bubble.csv', d3.autoType).then(
     });
     dataset.sort((a, b) => b['IMDb'] - a['IMDb']);
     let dat = dataset.slice(0, 600);
-    console.log(dataset);
+
     const Bubble = BubbleChart('.bubble');
     Bubble.update(dat);
 
