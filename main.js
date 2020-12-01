@@ -2,6 +2,16 @@ import mapDataProcessor from './js/map/mapDataProcessor.js';
 import MapChart from './js/map/mapchart.js';
 import PieChart from './js/pie/piechart.js';
 import BubbleChart from './js/bubble/Bubble.js';
+import LineChart from './js/line/linechart.js';
+
+// Load CSV file
+d3.csv('data/clean/netflix-movie.csv').then((data) => {
+  console.log(data);
+
+  const lineChart = LineChart('#line-chart-container');
+  lineChart.update(data);
+
+});
 
 Promise.all([
   d3.json('./data/raw/world-110m.json'),
