@@ -1,6 +1,6 @@
 export default function LineChart(container) {
   const margin = { top: 40, right: 40, bottom: 40, left: 40 };
-  const width = 800 - margin.left - margin.right;
+  const width = 500 - margin.left - margin.right;
   const height = 500 - margin.top - margin.bottom;
 
   const svg = d3
@@ -34,13 +34,13 @@ export default function LineChart(container) {
     let line = d3
       .line()
       .curve(d3.curveCatmullRom)
-      .x((d) => x(d.Year) + 101)
+      .x((d) => x(d.Year))
       .y((d) => y(d.MovieTickets));
 
     let line1 = d3
       .line()
       .curve(d3.curveCatmullRom)
-      .x((d) => x(d.Year) + 101)
+      .x((d) => x(d.Year))
       .y((d) => y1(d.NetflixSubscribers));
 
     const l = length(line(data));
@@ -172,7 +172,7 @@ export default function LineChart(container) {
         d3.select('.tooltip-line')
           .style('display', 'inline-block')
           .style('opacity', 1)
-          .style('left', pos[0] + 10 + 'px')
+          .style('left', pos[0] + 'px')
           .style('top', pos[1] + 'px')
           .html(d.MovieTickets + ' million');
       })
@@ -182,7 +182,7 @@ export default function LineChart(container) {
           .style('opacity', 0)
           .html('');
       })
-      .attr('cx', (d) => x(d.Year) + 101)
+      .attr('cx', (d) => x(d.Year))
       .attr('cy', (d) => y(d.MovieTickets))
       .attr('r', 3.5)
       .style('fill', 'white')
@@ -199,7 +199,7 @@ export default function LineChart(container) {
         d3.select('.tooltip-line1')
           .style('display', 'inline-block')
           .style('opacity', 0.9)
-          .style('left', pos[0] + 10 + 'px')
+          .style('left', pos[0] + 'px')
           .style('top', pos[1] + 'px')
           .html(d.NetflixSubscribers + ' million');
       })
@@ -209,7 +209,7 @@ export default function LineChart(container) {
           .style('opacity', 0)
           .html('');
       })
-      .attr('cx', (d) => x(d.Year) + 101)
+      .attr('cx', (d) => x(d.Year))
       .attr('cy', (d) => y1(d.NetflixSubscribers))
       .attr('r', 3.5)
       .style('fill', 'white')
