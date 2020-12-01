@@ -5,7 +5,7 @@ export default function DensityChart(container) {
       bottom: 30,
       left: 50,
     },
-    width = 600 - margin.left - margin.right,
+    width = 400 - margin.left - margin.right,
     height = 400 - margin.top - margin.bottom;
 
   // append the svg object to the body of the page

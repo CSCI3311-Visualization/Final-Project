@@ -38,11 +38,9 @@ body {
 
 h1,
 h3 {
-  color: #0b519b;
+  color: black;
   text-align: center;
 }
-
-
 
 .text-block {
   font-size: 25px;

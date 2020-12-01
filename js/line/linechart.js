@@ -1,6 +1,6 @@
 export default function LineChart(container) {
   const margin = { top: 40, right: 40, bottom: 40, left: 40 };
-  const width = 700 - margin.left - margin.right;
+  const width = 500 - margin.left - margin.right;
   const height = 500 - margin.top - margin.bottom;
 
   const svg = d3
