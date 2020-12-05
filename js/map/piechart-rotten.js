@@ -24,10 +24,6 @@ export default function PieChart(container) {
       data = [0, 0, 100];
     }
     const arcs = d3.pie()(data);
-
-    console.log('piechart', data);
-    console.log('arcs', arcs);
-
     const pieGraph = group.selectAll('slices');
 
     pieGraph

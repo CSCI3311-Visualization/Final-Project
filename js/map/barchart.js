@@ -29,9 +29,6 @@ export default function BarChart(container) {
     const platforms = data.map((d) => d.platform);
     const countMax = d3.max(data, (d) => d.count);
 
-    console.log('barchart update data', data);
-    console.log('platforms', platforms);
-
     xScale.domain(platforms);
     yScale.domain([0, countMax + 1]);
     yAxis.ticks(Math.min(countMax + 1, 10));
