@@ -2,7 +2,7 @@ export default function BarChart(container) {
   // Initialization
   // Create a SVG with the margin convention
   const margin = { top: 20, right: 50, bottom: 20, left: 50 };
-  const width = 400 - margin.left - margin.right;
+  const width = 500 - margin.left - margin.right;
   const height = 350 - margin.top - margin.bottom;
 
   const svg = d3
@@ -34,6 +34,7 @@ export default function BarChart(container) {
     yAxis.ticks(Math.min(countMax + 1, 10));
 
     group.selectAll('rect').remove();
+    group.selectAll('.label').remove();
 
     const rects = group.selectAll('rect').data(data);
 
@@ -47,20 +48,33 @@ export default function BarChart(container) {
       .attr('fill', 'orange')
       .merge(rects);
 
+    const texts = rects
+      .enter()
+      .append('text')
+      .attr('class', 'label')
+      .attr('x', (d) => xScale(d.platform) + xScale.bandwidth() / 2)
+      .attr('y', (d) => yScale(d.count) - 5)
+      .text((d) => {
+        if (d.count === 0) return;
+        return d.count;
+      })
+      .attr('text-anchor', 'middle');
+
     rects.exit().remove();
 
     xAxisGroup
       .attr('transform', 'translate(0,' + height + ')')
       .call(xAxis)
-      .call((g) =>
-        g
-          .append('text')
-          .attr('x', width + 45)
-          .attr('y', 0)
-          .attr('font-weight', 'bold')
-          .attr('text-anchor', 'end')
-          .attr('fill', 'black')
-          .text('Platform')
+      .call(
+        (g) =>
+          g
+            .append('text')
+            .attr('x', width + 45)
+            .attr('y', 0)
+            .attr('font-weight', 'bold')
+            .attr('text-anchor', 'end')
+            .attr('fill', 'black')
+        // .text('Platform')
       );
 
     yAxisGroup
