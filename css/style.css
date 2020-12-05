@@ -5,11 +5,13 @@ body {
 
 .image {
   border-radius: 25px;
-  margin-bottom: 5%;
+  margin: 5%;
 }
 
 .fp-controlArrow {
-  margin: 5%;
+  /* margin: 0 2.5%; */
+  /* margin-left: 2%; */
+  margin-right: 2%;
 }
 
 .line-grid-container {
@@ -28,14 +30,14 @@ body {
   margin: 0 5%;
 }
 
-.line-content {
+.content-box {
   background-color: #f7f7f7;
   border: 1px solid #ddd;
   padding: 20px;
   border-radius: 4px;
   margin: 0 10%;
   font-family: helvetica;
-  font-size: 25px;
+  font-size: 22px;
   text-align: center;
 }
 
@@ -75,7 +77,7 @@ h3 {
   font-weight: bold;
 }
 
-#thanks {
+.thanks {
   font-size: 40px;
   margin-top: 10%;
   color: orange;
@@ -150,4 +152,42 @@ h3 {
 
 .rating-container {
   display: flex;
+  flex-direction: row;
+}
+
+/* .outro-container {
+  display: grid;
+  align-items: stretch;
+  justify-items: center;
+  grid-template-columns: 50% 50%;
+  row-gap: 20px;
+  column-gap: 40px;
+  grid-template-areas:
+    'header header'
+    'image paragraph'
+    'footer footer';
+} */
+
+.outro-container {
+  display: flex;
+  justify-content: center;
+}
+
+#outro-header {
+  margin: 5% 0;
+}
+
+#outro-image {
+  flex: 50%;
+}
+
+#outro-paragraph {
+  flex: 50%;
+  text-align: justify;
+  border-color: orange;
+  vertical-align: center;
+}
+
+.outro-el {
+  margin: 0 5%;
 }
