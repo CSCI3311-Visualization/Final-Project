@@ -170,9 +170,6 @@ export default function LineChart(container) {
       .append('circle')
       .on('mouseenter', (event, d) => {
         const pos = d3.pointer(event, window);
-
-        console.log(pos);
-
         d3.select('.tooltip-line')
           .style('display', 'inline-block')
           .style('opacity', 1)
@@ -197,9 +194,6 @@ export default function LineChart(container) {
       .append('circle')
       .on('mouseenter', (event, d) => {
         const pos = d3.pointer(event, window);
-
-        console.log(pos);
-
         d3.select('.tooltip-line1')
           .style('display', 'inline-block')
           .style('opacity', 0.9)

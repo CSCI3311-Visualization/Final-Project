@@ -5,7 +5,7 @@ export default function BubbleChart(container) {
       top: 20,
       right: 10,
       bottom: 20,
-      left: 10
+      left: 10,
     },
     width = 900 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
@@ -42,13 +42,9 @@ export default function BubbleChart(container) {
       if (!event.active) simulation.alphaTarget(0.0);
       event.subject.fx = null;
       event.subject.fy = null;
-
     }
-    return d3.drag()
-      .on("start", started)
-      .on("drag", dragged)
-      .on("end", ended);
-  }
+    return d3.drag().on('start', started).on('drag', dragged).on('end', ended);
+  };
 
   let x = d3
     .scaleLinear()
@@ -96,7 +92,6 @@ export default function BubbleChart(container) {
   function step() {
     sliderStage = (sliderStage % 4) + 1;
     handleMove(sliderStage);
-
   }
 
   function handleMove(h) {
@@ -176,13 +171,30 @@ export default function BubbleChart(container) {
       d.y = height / 2;
     });
 
-    const simulation = d3.forceSimulation(data)
+    const simulation = d3
+      .forceSimulation(data)
       .force('charge', d3.forceManyBody().strength(0.05))
-      .force("y", d3.forceY().y(height / 2).strength(0.05))
-      .force("x", d3.forceX().x(width / 2).strength(0.05))
-      .force('collision', d3.forceCollide().radius(d3.max(data, d => d.IMDb)).iterations(15));
-
-
+      .force(
+        'y',
+        d3
+          .forceY()
+          .y(height / 2)
+          .strength(0.05)
+      )
+      .force(
+        'x',
+        d3
+          .forceX()
+          .x(width / 2)
+          .strength(0.05)
+      )
+      .force(
+        'collision',
+        d3
+          .forceCollide()
+          .radius(d3.max(data, (d) => d.IMDb))
+          .iterations(15)
+      );
 
     function showCircles() {
       let circles = group
@@ -228,12 +240,9 @@ export default function BubbleChart(container) {
         density.update(data, d.category, cScale(d.category));
       });
 
-      simulation.on("tick", () => {
-        circles
-          .attr('cx', (d) => d.x)
-          .attr('cy', (d) => d.y);
+      simulation.on('tick', () => {
+        circles.attr('cx', (d) => d.x).attr('cy', (d) => d.y);
       });
-
     }
 
     function hideCircles() {
@@ -293,9 +302,9 @@ export default function BubbleChart(container) {
         simulation.force(
           'x',
           d3
-          .forceX()
-          .strength(forceStrength)
-          .x((d) => centerScale(d.platform))
+            .forceX()
+            .strength(forceStrength)
+            .x((d) => centerScale(d.platform))
         );
       } else if (stage === 3) {
         hideComments();
@@ -308,9 +317,9 @@ export default function BubbleChart(container) {
         simulation.force(
           'x',
           d3
-          .forceX()
-          .strength(0.07)
-          .x((d) => centerScale(d.category))
+            .forceX()
+            .strength(0.07)
+            .x((d) => centerScale(d.category))
         );
       }
 
@@ -322,7 +331,7 @@ export default function BubbleChart(container) {
       'Movies on Netflix',
       'Genre Distribution',
       'Runtime Distribution',
-    ]
+    ];
     let description = [
       '',
       'These are top 500 movies streamed on Netflix. The radius of a circle represents IMDb ratings, so the bigger the circle, the movie has higher rating. The colors of circles represent different genres of streamed movies. You can hover over to the circle to identify information of movies!',
