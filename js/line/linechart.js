@@ -164,7 +164,7 @@ export default function LineChart(container) {
 
     // chart
 
-    const circleRadius = 5;
+    const circleRadius = 7;
     // add circles
     datapoints
       .append('circle')

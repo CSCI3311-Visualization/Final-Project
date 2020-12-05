@@ -40,11 +40,9 @@ export default function MapChart(container) {
 
     const objKeys = Object.keys(obj);
     const totalExtent = d3.extent(objKeys, (d) => obj[d].total);
-    console.log('totalExtent', totalExtent);
 
     const totals = objKeys.map((k) => obj[k].total);
     totals.sort((a, b) => a - b);
-    console.log('totals', totals);
 
     const colorScale = d3
       .scaleThreshold()
@@ -83,11 +81,44 @@ export default function MapChart(container) {
         .style('stroke-width', 5)
         .style('stroke', 'black');
 
-      const country = d.properties.name;
-      d3.select('#Map-Country').text(country);
+      let xPosition = parseFloat(d3.select(this).attr('cx'));
+      let yPosition = parseFloat(d3.select(this).attr('cy'));
 
+      const tooltip = d3.select('#map-tooltip');
+      const country = d.properties.name;
       const countryVal = obj[country];
+      const total = countryVal ? countryVal.total : null;
+
+      let text = 'Country: ' + country;
+
+      if (total !== null) {
+        text +=
+          '<br />' +
+          'Movie Count: ' +
+          total +
+          '<br />' +
+          'Click to see more info';
+      } else {
+        text += '<br />' + 'No data available';
+      }
+
+      tooltip.html(text);
+
+      // set position and show tooltip
+      const pos = d3.pointer(e, window);
+      tooltip.style('top', pos[1] + 'px');
+      tooltip.style('left', pos[0] + 'px');
+      tooltip.style('display', 'block');
+    };
+
+    const click = function (e, d) {
+      const country = d.properties.name;
+      const countryVal = obj[country];
+
       if (!countryVal) return;
+
+      d3.select('#Map-Country').text(country);
+      d3.select('#Average-h4').text('Average show ratings from ' + country);
 
       const mapProcessed = mapDataProcessor.barProcess(countryVal);
 
@@ -109,6 +140,10 @@ export default function MapChart(container) {
     const mouseleave = function (e, d) {
       d3.selectAll('.world-map').transition().duration(200).style('opacity', 1);
       d3.select(this).transition().duration(200).style('stroke', 'transparent');
+
+      const tooltip = d3.select('#map-tooltip');
+      // hide tooltip
+      tooltip.style('display', 'none');
     };
 
     group
@@ -126,7 +161,8 @@ export default function MapChart(container) {
       .attr('d', path)
       .style('opacity', 1)
       .on('mouseover', mouseover)
-      .on('mouseleave', mouseleave);
+      .on('mouseleave', mouseleave)
+      .on('click', click);
 
     group
       .append('path')

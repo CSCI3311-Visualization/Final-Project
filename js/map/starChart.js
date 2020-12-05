@@ -2,7 +2,7 @@ import d3Star from './star.js';
 
 export default function StarChart(container) {
   const margin = { top: 20, right: 20, bottom: 20, left: 20 };
-  const width = 300 - margin.left - margin.right;
+  const width = 200 - margin.left - margin.right;
   const height = 200 - margin.top - margin.bottom;
   const size = 20;
   const next = size + 5;
@@ -15,10 +15,7 @@ export default function StarChart(container) {
 
   const group = svg
     .append('g')
-    .attr(
-      'transform',
-      'translate(' + (1.05 * width) / 2 + ',' + height / 2 + ')'
-    );
+    .attr('transform', 'translate(' + width / 2 + ',' + (1 * height) / 3 + ')');
 
   const star1 = d3Star();
   const star2 = d3Star();
@@ -30,15 +27,14 @@ export default function StarChart(container) {
     /// Text append
     svg.selectAll('.imdb-label').remove();
 
-    svg
+    group
       .append('text')
       .attr('class', 'imdb-label')
       .attr('x', 0)
-      .attr('y', height / 2 + 5)
+      .attr('y', 50)
       .text(() => {
         const sum = data.reduce((acc, cv) => acc + cv).toFixed(2);
-        console.log('reduce sum', sum);
-        return 'IMDB Rating: ' + sum;
+        return 'IMDB Score: ' + sum;
       })
       .attr('text-anchor', 'left')
       .attr('font-weight', 'bold')

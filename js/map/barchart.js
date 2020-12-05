@@ -3,7 +3,7 @@ export default function BarChart(container) {
   // Create a SVG with the margin convention
   const margin = { top: 20, right: 50, bottom: 20, left: 50 };
   const width = 400 - margin.left - margin.right;
-  const height = 200 - margin.top - margin.bottom;
+  const height = 350 - margin.top - margin.bottom;
 
   const svg = d3
     .select(container)
@@ -47,7 +47,7 @@ export default function BarChart(container) {
       .attr('height', (d) => height - yScale(d.count))
       .attr('x', (d) => xScale(d.platform))
       .attr('y', (d) => yScale(d.count))
-      .attr('fill', 'steelblue')
+      .attr('fill', 'orange')
       .merge(rects);
 
     rects.exit().remove();
@@ -76,7 +76,6 @@ export default function BarChart(container) {
           .attr('fill', 'black')
           .attr('font-weight', 'bold')
           .attr('text-anchor', 'start')
-          .text('Movie Count')
       );
   }
 

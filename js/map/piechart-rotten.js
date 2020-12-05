@@ -20,6 +20,9 @@ export default function PieChart(container) {
   const arc = d3.arc().innerRadius(0).outerRadius(50);
 
   function update(data) {
+    if (data[0] === 100 || data[1] === 100) {
+      data = [0, 0, 100];
+    }
     const arcs = d3.pie()(data);
 
     console.log('piechart', data);
