@@ -49,7 +49,7 @@ export default function MapChart(container) {
     const colorScale = d3
       .scaleThreshold()
       .domain([50, 100, 300, 1500])
-      .range(d3.schemeBlues[5]);
+      .range(d3.schemeOranges[5]);
 
     const defaultUpdate = function (country) {
       // "United States of America";
