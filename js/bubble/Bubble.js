@@ -214,18 +214,17 @@ export default function BubbleChart(container) {
 
       circles
         .on('mouseover', function (event, d) {
-          let xPosition = parseFloat(d3.select(this).attr('cx'));
-          let yPosition = parseFloat(d3.select(this).attr('cy'));
+          const pos = d3.pointer(event, window);
 
           //Update the tooltip position and value
           d3.select('#tooltip2')
-            .style('left', xPosition + 'px')
-            .style('top', yPosition + 'px')
+            .style('left', pos[0] + 'px')
+            .style('top', pos[1] + 'px')
             .select('#title')
             .text(d.Title);
           d3.select('#tooltip2')
-            .style('left', xPosition + 'px')
-            .style('top', yPosition + 'px')
+            .style('left', pos[0] + 'px')
+            .style('top', pos[1] + 'px')
             .select('#genre')
             .text(d.Genres);
           // Show the tooltip
@@ -334,9 +333,9 @@ export default function BubbleChart(container) {
     ];
     let description = [
       '',
-      'These are top 500 movies streamed on Netflix. The radius of a circle represents IMDb ratings, so the bigger the circle, the movie has higher rating. The colors of circles represent different genres of streamed movies. You can hover over to the circle to identify information of movies!',
-      'These are top 5 genre groups streamed on Netflix. Interestingly, Biography & Documentary genre group leads with high ratings. ',
-      'Now click on the bubbles to find out runtime of each genre!',
+      'These are top 500 movies streamed on Netflix. </br>The radius of a circle represents IMDb ratings of each movie, </br>and the colors of circles represent different genres of streamed movies. </br>You can hover over to the circle to identify information of movies!',
+      'These are top 5 genre groups streamed on Netflix. </br>Interestingly, Biography & Documentary genre group leads with high ratings. </br></br>',
+      'Now click on the bubbles to find out runtime of each genre!</br></br></br>',
     ];
 
     function setupButtons() {
