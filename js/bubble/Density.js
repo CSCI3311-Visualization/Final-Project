@@ -2,10 +2,10 @@ export default function DensityChart(container) {
   const margin = {
       top: 20,
       right: 30,
-      bottom: 30,
-      left: 50,
+      bottom: 20,
+      left: 30,
     },
-    width = 400 - margin.left - margin.right,
+    width = 500 - margin.left - margin.right,
     height = 400 - margin.top - margin.bottom;
 
   // append the svg object to the body of the page
@@ -39,6 +39,7 @@ export default function DensityChart(container) {
 
   const yLabel = group
     .append('text')
+    .attr('class', 'yLabel')
     .attr('x', -5)
     .attr('y', -5)
     .attr('font-size', 14);
@@ -58,9 +59,7 @@ export default function DensityChart(container) {
 
     x.domain([0, d3.max(obj, (d) => d.Runtime)]);
 
-    xDisplay.attr('transform', `translate(0, ${height})`).call(xAxis);
-    xLabel.text('runtime');
-    yLabel.text('counts');
+    xDisplay.attr('transform', `translate(0, ${height})`);
 
     var histogram = d3
       .histogram()
@@ -72,15 +71,26 @@ export default function DensityChart(container) {
 
     y.domain([0, d3.max(bins, (d) => d.length)]);
 
-    yDisplay.call(yAxis);
+    function showAxis() {
+      xDisplay.attr('display', true);
+      yDisplay.attr('display', true);
+      xLabel.attr('display', true);
+      yLabel.attr('display', true);
+    }
 
-    group.selectAll('rect').remove();
+    xDisplay.call(xAxis);
+    yDisplay.call(yAxis);
+    xLabel.text('runtime');
+    yLabel.text('counts');
+
+    showAxis();
+    group.selectAll('.rect').remove();
 
     let bars = group
       .selectAll('rect')
       .data(bins)
-      .enter()
-      .append('rect')
+      .join('rect')
+      .attr('class', 'rect')
       .attr('x', 1)
       .attr('transform', function (d) {
         return 'translate(' + x(d.x0) + ',' + y(d.length) + ')';
@@ -94,18 +104,17 @@ export default function DensityChart(container) {
       .style('fill', scale);
     bars
       .on('mouseover', function (event, d) {
-        let xPosition = parseFloat(d3.select(this).attr('width'));
-        let yPosition = parseFloat(d3.select(this).attr('height'));
+        const pos = d3.pointer(event, window);
 
         //Update the tooltip position and value
         d3.select('#tooltip')
-          .style('left', xPosition + 'px')
-          .style('top', yPosition + 'px')
+          .style('left', pos[0] + 'px')
+          .style('top', pos[1] + 'px')
           .select('#runtime')
-          .text(d[0].Runtime);
+          .text(d[0].Runtime + ' ~ ' + (d[0].Runtime + 1));
         d3.select('#tooltip')
-          .style('left', xPosition + 10 + 'px')
-          .style('top', yPosition + 10 + 'px')
+          .style('left', pos[0] + 'px')
+          .style('top', pos[1] + 'px')
           .select('#count')
           .text(d.length);
         // Show the tooltip
@@ -115,9 +124,23 @@ export default function DensityChart(container) {
         //Hide the tooltip
         d3.select('#tooltip').classed('hidden', true);
       });
+
+    bars.exit().remove();
+  }
+
+  function hideAxis() {
+    xDisplay.attr('display', 'none');
+    yDisplay.attr('display', 'none');
+    xLabel.attr('display', 'none');
+    yLabel.attr('display', 'none');
+  }
+  function removeBars() {
+    hideAxis();
+    group.selectAll('.rect').remove();
   }
 
   return {
     update,
+    removeBars,
   };
 }

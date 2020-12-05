@@ -3,14 +3,14 @@ import DensityChart from './Density.js';
 export default function BubbleChart(container) {
   const margin = {
       top: 20,
-      right: 30,
-      bottom: 30,
-      left: 50,
+      right: 10,
+      bottom: 20,
+      left: 10
     },
-    width = 1200 - margin.left - margin.right,
-    height = 600 - margin.top - margin.bottom;
+    width = 900 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
 
-  const rScale = d3.scaleLinear().range([5, 11]).clamp(true);
+  const rScale = d3.scaleLinear().range([5, 12]).clamp(true);
   const cScale = d3.scaleOrdinal(d3.schemeTableau10);
   const centerScale = d3.scalePoint().padding(1).range([0, width]);
   const forceStrength = 0.05;
@@ -22,32 +22,35 @@ export default function BubbleChart(container) {
     .attr('width', width + margin.left + margin.right)
     .attr('height', height + margin.top + margin.bottom);
 
-  // const drag = (simulation) => {
-  //     function started(event) {
-  //         if (!event.active) simulation.alpha(1).restart();
-  //         event.subject.fx = event.subject.x;
-  //         event.subject.fy = event.subject.y;
-  //     }
+  const group = svg
+    .append('g')
+    .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-  //     function dragged(event) {
-  //         event.subject.fx = event.x;
-  //         event.subject.fy = event.y;
-  //     }
+  const drag = (simulation) => {
+    function started(event) {
+      if (!event.active) simulation.alpha(1).restart();
+      event.subject.fx = event.subject.x;
+      event.subject.fy = event.subject.y;
+    }
 
-  //     function ended(event) {
-  //         if (!event.active) simulation.alphaTarget(0.0);
-  //         event.subject.fx = null;
-  //         event.subject.fy = null;
+    function dragged(event) {
+      event.subject.fx = event.x;
+      event.subject.fy = event.y;
+    }
 
-  //     }
-  //     return d3.drag()
-  //         .on("start", started)
-  //         .on("drag", dragged)
-  //         .on("end", ended);
-  // }
+    function ended(event) {
+      if (!event.active) simulation.alphaTarget(0.0);
+      event.subject.fx = null;
+      event.subject.fy = null;
 
-  var currentValue = 0;
-  var x = d3
+    }
+    return d3.drag()
+      .on("start", started)
+      .on("drag", dragged)
+      .on("end", ended);
+  }
+
+  let x = d3
     .scaleLinear()
     .domain([1, 4])
     .range([0, width - margin.left - margin.right])
@@ -59,7 +62,7 @@ export default function BubbleChart(container) {
     .attr('width', width)
     .attr('height', 50);
 
-  var slider = slidersvg
+  let slider = slidersvg
     .append('g')
     .attr('class', 'slider')
     .attr('transform', 'translate(' + margin.left + ',' + 15 + ')');
@@ -69,23 +72,6 @@ export default function BubbleChart(container) {
     .attr('class', 'track')
     .attr('x1', x.range()[0])
     .attr('x2', x.range()[1]);
-  // .select(function () {
-  //     return this.parentNode.appendChild(this.cloneNode(true));
-  // })
-  // .attr("class", "track-inset")
-  // .select(function () {
-  //     return this.parentNode.appendChild(this.cloneNode(true));
-  // })
-  // .attr("class", "track-overlay")
-  // .call(d3.drag()
-  //     .on("start.interrupt", function () {
-  //         slider.interrupt();
-  //     })
-  //     .on("start drag", function () {
-  //         currentValue = d3.event.x;
-  //         update(x.invert(currentValue));
-  //     })
-  // );
 
   slider
     .insert('g', '.track-overlay')
@@ -97,38 +83,30 @@ export default function BubbleChart(container) {
     .attr('x', x)
     .attr('y', 10)
     .attr('text-anchor', 'middle')
-    .text(function (d) {
-      return d;
-    });
+    .text((d) => d);
 
   //dragging handle
-  var handle = slider
+  let handle = slider
     .insert('circle', '.track-overlay')
-    .attr('class', 'handle')
-    .attr('r', 9);
+    .attr('class', 'handle');
 
-  var playButton = d3.select('#play-button');
-
-  var targetValue = width;
+  let playButton = d3.select('#play-button');
   let sliderStage = 1;
 
   function step() {
     sliderStage = (sliderStage % 4) + 1;
     handleMove(sliderStage);
-    currentValue = currentValue + targetValue / 10;
-    if (currentValue > targetValue) {
-      currentValue = 0;
-    }
+
   }
 
   function handleMove(h) {
-    var h = Math.round(h);
-    sliderStage = h;
-    handle.transition().duration(200).attr('cx', x(h));
+    let round_h = Math.round(h);
+    sliderStage = round_h;
+    handle.transition().duration(200).attr('cx', x(round_h));
   }
 
   function showComments() {
-    let comments = svg
+    let comments = group
       .append('text')
       .attr('class', 'comments')
       .attr('x', width / 2)
@@ -150,7 +128,7 @@ export default function BubbleChart(container) {
   function update(data) {
     let density = DensityChart('.density');
 
-    //for color variations
+    //for color iterations
     data.forEach((d) => {
       let genre = d.Genres;
 
@@ -179,7 +157,7 @@ export default function BubbleChart(container) {
         d.category = 'genre4';
       } else if (
         genre == 'Drama' ||
-        genre == 'Family' ||
+        // genre == 'Family' ||
         genre == 'Animation'
       ) {
         d.category = 'genre5';
@@ -198,36 +176,16 @@ export default function BubbleChart(container) {
       d.y = height / 2;
     });
 
-    const simulation = d3
-      .forceSimulation(data)
-      // .force('charge', d3.forceManyBody().strength(0))
-      .force(
-        'y',
-        d3
-          .forceY()
-          .y(height / 2)
-          .strength(0.05)
-      )
-      .force(
-        'x',
-        d3
-          .forceX()
-          .x(width / 2)
-          .strength(0.05)
-      )
-      // .force('collision', d3.forceCollide().radius(d3.max(data, d => d.IMDb)).iterations(15))
-      .force(
-        'collide',
-        d3.forceCollide(d3.max(data, (d) => d.IMDb)).iterations(15)
-      );
-    // .force("charge", d3.forceManyBody().strength(5))
+    const simulation = d3.forceSimulation(data)
+      .force('charge', d3.forceManyBody().strength(0.05))
+      .force("y", d3.forceY().y(height / 2).strength(0.05))
+      .force("x", d3.forceX().x(width / 2).strength(0.05))
+      .force('collision', d3.forceCollide().radius(d3.max(data, d => d.IMDb)).iterations(15));
 
-    // simulation
-    //     .nodes(data)
-    //     .on("tick", ticked);
+
 
     function showCircles() {
-      var circles = svg
+      let circles = group
         .selectAll('circle')
         .data(data)
         .join('circle')
@@ -239,10 +197,8 @@ export default function BubbleChart(container) {
         .style('fill', (d, i) => {
           return cScale(d.category);
         })
-        // .style("stroke", "black")
-        // .style("stroke-width", 1)
-        .style('pointer-events', 'all');
-      // .call(drag(simulation));
+        .style('pointer-events', 'all')
+        .call(drag(simulation));
 
       circles
         .on('mouseover', function (event, d) {
@@ -272,24 +228,20 @@ export default function BubbleChart(container) {
         density.update(data, d.category, cScale(d.category));
       });
 
-      function ticked() {
+      simulation.on("tick", () => {
         circles
-          .attr('cx', function (d) {
-            return d.x;
-          })
-          .attr('cy', function (d) {
-            return d.y;
-          });
-      }
-      simulation.on('tick', ticked);
+          .attr('cx', (d) => d.x)
+          .attr('cy', (d) => d.y);
+      });
+
     }
 
     function hideCircles() {
-      svg.selectAll('circle').remove();
+      group.selectAll('circle').remove();
     }
 
     function showTitles(stage, scale) {
-      var titles = svg.selectAll('.title').data(scale.domain());
+      let titles = group.selectAll('.title').data(scale.domain());
 
       titles
         .enter()
@@ -297,33 +249,31 @@ export default function BubbleChart(container) {
         .attr('class', 'title')
         .merge(titles)
         .attr('x', (d) => scale(d))
-        .attr('y', 60)
+        .attr('y', 30)
         .attr('text-anchor', 'middle')
         .style('font-weight', 'bold')
+        .style('font-size', 12)
         .text((d) => {
           let genre_title;
           if (d === 'genre1') {
-            // genre_title = "Action & Adventure & Sci-Fi & Fantasy"
             return 'Action & Adventure';
           } else if (d === 'genre2') {
-            // genre_title = "Comedy & Talk-Show & Game-Show & Reality-TV"
             return 'Comedy & Shows';
           } else if (d === 'genre3') {
             return 'Bio & Documentary';
           } else if (d === 'genre4') {
             return 'Horror & Crime';
           } else if (d === 'genre5') {
-            return 'Drama & Family & Animation';
+            return 'Drama & Animation';
           } else if (d === 'genre6') {
             return 'Others';
           }
-          return d;
         });
       titles.exit().remove();
     }
 
     function hideTitles() {
-      svg.selectAll('.title').remove();
+      group.selectAll('.title').remove();
     }
 
     function splitBubbles(stage) {
@@ -343,9 +293,9 @@ export default function BubbleChart(container) {
         simulation.force(
           'x',
           d3
-            .forceX()
-            .strength(forceStrength)
-            .x((d) => centerScale(d.platform))
+          .forceX()
+          .strength(forceStrength)
+          .x((d) => centerScale(d.platform))
         );
       } else if (stage === 3) {
         hideComments();
@@ -358,20 +308,25 @@ export default function BubbleChart(container) {
         simulation.force(
           'x',
           d3
-            .forceX()
-            .strength(forceStrength)
-            .x((d) => centerScale(d.category))
+          .forceX()
+          .strength(0.07)
+          .x((d) => centerScale(d.category))
         );
       }
 
       // @v4 We can reset the alpha value and restart the simulation
       simulation.alpha(2).restart();
     }
-
+    let heading = [
+      '',
+      'Movies on Netflix',
+      'Genre Distribution',
+      'Runtime Distribution',
+    ]
     let description = [
       '',
-      'These are top 600 movies streamed on Netflix. The radius of a circle represents IMDb ratings, and the colors are genres.',
-      'These are top 5 genres streamed on Netflix. Among these categories, Biography & Documentary genre leads with high ratings',
+      'These are top 500 movies streamed on Netflix. The radius of a circle represents IMDb ratings, so the bigger the circle, the movie has higher rating. The colors of circles represent different genres of streamed movies. You can hover over to the circle to identify information of movies!',
+      'These are top 5 genre groups streamed on Netflix. Interestingly, Biography & Documentary genre group leads with high ratings. ',
       'Now click on the bubbles to find out runtime of each genre!',
     ];
 
@@ -380,10 +335,12 @@ export default function BubbleChart(container) {
         step();
         if (sliderStage === 1) {
           d3.select('#play-button').text('Next  ▶');
-          // d3.select('.density').remove();
+          density.removeBars();
         } else if (sliderStage === 4) {
           d3.select('#play-button').text('Restart  ↻');
         }
+        let hTag = document.querySelector('#heading-1');
+        hTag.innerHTML = heading[sliderStage - 1];
         let pTag = document.querySelector('#comment-1');
         pTag.innerHTML = description[sliderStage - 1];
         splitBubbles(sliderStage);
