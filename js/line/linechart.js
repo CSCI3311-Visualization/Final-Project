@@ -50,7 +50,7 @@ export default function LineChart(container) {
       .append('path')
       .datum(data)
       .attr('fill', 'none')
-      .attr('stroke', 'steelblue')
+      .attr('stroke', 'black')
       .attr('stroke-width', 2.5)
       .attr('stroke-linejoin', 'round')
       .attr('stroke-linecap', 'round')
@@ -65,7 +65,7 @@ export default function LineChart(container) {
       .append('path')
       .datum(data)
       .attr('fill', 'none')
-      .attr('stroke', 'red')
+      .attr('stroke', 'orange')
       .attr('stroke-width', 2.5)
       .attr('stroke-linejoin', 'round')
       .attr('stroke-linecap', 'round')
@@ -117,9 +117,10 @@ export default function LineChart(container) {
             .select('.tick:last-of-type text')
             .clone()
             .attr('x', 6)
+            .attr('y', -4.5)
             .attr('text-anchor', 'start')
             .attr('font-weight', 'bold')
-            .attr('fill', 'steelblue')
+            .attr('fill', 'black')
             .text('Number of Movie Tickets Sold, US  (million)')
         );
 
@@ -141,9 +142,10 @@ export default function LineChart(container) {
             .select('.tick:last-of-type text')
             .clone()
             .attr('x', 8)
+            .attr('y', -4.5)
             .attr('text-anchor', 'start')
             .attr('font-weight', 'bold')
-            .attr('fill', 'red')
+            .attr('fill', 'orange')
             .text('Netflix Subscriptions, US (million)')
         );
 

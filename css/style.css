@@ -5,6 +5,7 @@ body {
 
 .image {
   border-radius: 25px;
+  margin-bottom: 5%;
 }
 
 .fp-controlArrow {
@@ -38,13 +39,20 @@ body {
 
 h1,
 h3 {
+  font-weight: bold;
   color: black;
   text-align: center;
 }
 
+
+
+
+.smallfont {
+  font-size: 35px;
+}
+
 .text-block {
-  font-size: 25px;
-  margin-top: 20vh;
+  font-size: 20px;
 }
 
 #page-intro p {
@@ -53,14 +61,30 @@ h3 {
   margin: 0 auto;
 }
 
+
+.header {
+  font-size: 35px;
+  font-weight: bold;
+}
+
+
+#thanks {
+  font-size: 40px;
+  margin-top: 10%;
+  color: orange;
+  font-weight: bold;
+}
+
+
+
 /* Jane */
 .tooltip-line {
   display: none;
   position: absolute;
   font-size: 13px;
   padding: 4px;
-  background-color: steelblue;
-  color: white;
+  background-color: black;
+  color: orange;
   border-radius: 8px;
 }
 
@@ -69,8 +93,8 @@ h3 {
   position: absolute;
   font-size: 13px;
   padding: 4px;
-  background-color: red;
-  color: white;
+  background-color: orange;
+  color: black;
   border-radius: 8px;
 }
 /* End of Jane */
@@ -95,4 +119,15 @@ h3 {
   font-family: sans-serif;
   font-size: 16px;
   line-height: 20px;
+}
+
+#platform button {
+  background-color: orange;
+  border: black;
+  color: black;
+}
+
+#platform button:hover {
+  background-color: black;
+  color: white;
 }

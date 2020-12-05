@@ -143,7 +143,7 @@ export default function PieChart(container) {
     const color = d3
       .scaleOrdinal()
       .domain(data1)
-      .range(['blue', '#6495ED', 'red', '#800000', 'purple', '#9370DB']);
+      .range(["#fff5eb","#feddbd","#fdc28d","#fda25b","#f47420","#e05609"]);
 
     let piechart = group.datum(data1).selectAll('path').data(pie);
     piechart
