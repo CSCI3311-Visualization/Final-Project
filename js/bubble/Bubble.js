@@ -10,7 +10,7 @@ export default function BubbleChart(container) {
     width = 900 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
-  const rScale = d3.scaleLinear().range([5, 12]).clamp(true);
+  const rScale = d3.scaleLinear().range([5, 13]).clamp(true);
   const cScale = d3.scaleOrdinal(d3.schemeTableau10);
   const centerScale = d3.scalePoint().padding(1).range([0, width]);
   const forceStrength = 0.05;
@@ -173,27 +173,27 @@ export default function BubbleChart(container) {
 
     const simulation = d3
       .forceSimulation(data)
-      .force('charge', d3.forceManyBody().strength(0.05))
+      .force('charge', d3.forceManyBody().strength(forceStrength))
       .force(
         'y',
         d3
           .forceY()
           .y(height / 2)
-          .strength(0.05)
+          .strength(forceStrength)
       )
       .force(
         'x',
         d3
           .forceX()
           .x(width / 2)
-          .strength(0.05)
+          .strength(forceStrength)
       )
       .force(
         'collision',
         d3
           .forceCollide()
           .radius(d3.max(data, (d) => d.IMDb))
-          .iterations(15)
+          .iterations(25)
       );
 
     function showCircles() {
@@ -227,6 +227,11 @@ export default function BubbleChart(container) {
             .style('top', pos[1] + 'px')
             .select('#genre')
             .text(d.Genres);
+          d3.select('#tooltip2')
+            .style('left', pos[0] + 'px')
+            .style('top', pos[1] + 'px')
+            .select('#rating')
+            .text(d.IMDb);
           // Show the tooltip
           d3.select('#tooltip2').classed('hidden', false);
         })
@@ -333,8 +338,8 @@ export default function BubbleChart(container) {
     ];
     let description = [
       '',
-      'These are top 500 movies streamed on Netflix. </br>The radius of a circle represents IMDb ratings of each movie, </br>and the colors of circles represent different genres of streamed movies. </br>You can hover over to the circle to identify information of movies!',
-      'These are top 5 genre groups streamed on Netflix. </br>Interestingly, Biography & Documentary genre group leads with high ratings. </br></br>',
+      'These are top 500 movies streamed on Netflix. </br>The radius of a circle represents IMDb ratings of each movie. </br>The colors of circles represent various genres of streamed movies. </br>You can hover over to the circle to identify information of movies!',
+      'These are top 5 genre groups streamed on Netflix. </br>Biography & Documentary genre group leads with high ratings. </br></br>',
       'Now click on the bubbles to find out runtime of each genre!</br></br></br>',
     ];
 

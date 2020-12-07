@@ -51,11 +51,11 @@ d3.csv('./data/clean/streaming_platform_pie.csv', d3.autoType).then((data) => {
   let platform = 'All';
   d3.select('#group-by').on('change', (e) => {
     type = e.target.value;
-    pieChart.update(data, type, platform);
+    piechart.update(data, type, platform);
   });
   d3.select('#platform').on('click', (e) => {
     platform = e.target.value;
-    pieChart.update(data, type, platform);
+    piechart.update(data, type, platform);
   });
 
   const pieChart = PieChart('#pie-chart-container');
