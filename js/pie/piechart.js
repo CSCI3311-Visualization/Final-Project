@@ -1,25 +1,27 @@
 export default function PieChart(container) {
   // initialization
-  var margin = { top: 0, right: 10, bottom: 100, left: 60 },
-    width = 960 - margin.left - margin.right,
+  let margin = { top: 0, right: 10, bottom: 100, left: 60 },
+    width = 800 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
   const svg = d3
     .select(container)
     .append('svg')
     .attr('width', width + margin.left + margin.right)
-    .attr('height', height + margin.top + margin.bottom)
-    .append('g')
-    .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
+    .attr('height', height + margin.top + margin.bottom);
+
+  // .append('g')
 
   const group = svg
     .append('g')
-    .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+    .attr('transform', 'translate(' + (1 * width) / 2 + ',' + height / 2 + ')');
+
+  // .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
   function update(data, type, platform) {
-    var dataSelect = [];
+    let dataSelect = [];
 
-    for (var i = 0; i < data.length; i++) {
+    for (let i = 0; i < data.length; i++) {
       if (platform === 'All' && data[i].Age == type) {
         dataSelect.push({
           Age: data[i].Age,
@@ -56,23 +58,21 @@ export default function PieChart(container) {
       }
     }
 
-    var genres = [];
-    var doNothing = 0;
+    let genres = [];
+    let doNothing = 0;
 
-    for (var i = 0; i < dataSelect.length; i++) {
+    for (let i = 0; i < dataSelect.length; i++) {
       if (dataSelect[i].Genres == null) {
         doNothing++;
       } else {
-        var temp = dataSelect[i].Genres.split(',');
-        for (var j = 0; j < temp.length; j++) {
+        let temp = dataSelect[i].Genres.split(',');
+        for (let j = 0; j < temp.length; j++) {
           genres.push(temp[j]);
         }
       }
     }
 
-    var total = dataSelect.length;
-
-    var sortGenre = [];
+    let sortGenre = [];
     genres.forEach((d) => {
       let genre = d;
       if (
@@ -115,6 +115,8 @@ export default function PieChart(container) {
       }
     });
 
+    let total = sortGenre.length;
+
     const select = {};
     sortGenre.forEach((el) => {
       if (select[el]) {
@@ -124,9 +126,9 @@ export default function PieChart(container) {
       }
     });
 
-    var data1 = [];
+    let data1 = [];
 
-    for (var key in select) {
+    for (let key in select) {
       data1.push({
         genre: key,
         value: select[key],
@@ -134,18 +136,19 @@ export default function PieChart(container) {
       });
     }
 
+    console.log('data1', data1);
+
     const arc = d3.arc().innerRadius(0).outerRadius(150);
 
-    var pie = d3.pie().value(function (d) {
+    let pie = d3.pie().value(function (d) {
       return d.value;
     });
 
-    const color = d3
-      .scaleOrdinal()
-      .domain(data1)
-      .range(["#fff5eb","#feddbd","#fdc28d","#fda25b","#f47420","#e05609"]);
+    const color = d3.scaleOrdinal().domain(data1).range(d3.schemeCategory10);
+    // .range(['blue', '#6495ED', 'red', '#800000', 'purple', '#9370DB']);
 
-    let piechart = group.datum(data1).selectAll('path').data(pie);
+    let piechart = group.selectAll('path').data(pie(data1));
+
     piechart
       .enter()
       .append('path')
@@ -175,16 +178,18 @@ export default function PieChart(container) {
           );
       })
       .on('mouseleave', (event, d) => {
-        d3.select('.tooltip').style('display', 'none');
+        d3.select('.tooltip-pie').style('display', 'none');
       })
       .transition()
       .style('fill', function (d, i) {
         return color(i);
       })
+      .attr('opacity', 0.8)
       .attr('d', arc);
 
     piechart.exit().remove();
   }
+
   return {
     update,
   };
