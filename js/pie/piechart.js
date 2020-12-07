@@ -2,21 +2,22 @@ export default function PieChart(container) {
   // initialization
   let margin = { top: 0, right: 10, bottom: 100, left: 60 },
     width = 800 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+    height = 400 - margin.top - margin.bottom;
 
   const svg = d3
     .select(container)
     .append('svg')
     .attr('width', width + margin.left + margin.right)
-    .attr('height', height + margin.top + margin.bottom);
-
-  // .append('g')
-
-  const group = svg
+    .attr('height', height + margin.top + margin.bottom)
     .append('g')
     .attr('transform', 'translate(' + (1 * width) / 2 + ',' + height / 2 + ')');
 
-  // .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+  const group = svg
+    .append('g')
+    .attr(
+      'transform',
+      'translate(' + margin.left + ',' + margin.top + 50 + ')'
+    );
 
   function update(data, type, platform) {
     let dataSelect = [];
